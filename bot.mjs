@@ -6,7 +6,6 @@ import {
   getUrl,
   downloadInstagramReel,
   downloadYoutubeVideo,
-  downloadPinterest,
 } from "./utils.mjs";
 
 const bot = new Telegraf(process.env.TELEGRAM_TOKEN);
@@ -21,7 +20,6 @@ bot.command("yt", async (ctx) => {
   try {
     ctx.reply("Descargando Video...");
     const url = getUrl(ctx);
-    console.log(url);
     const fileSource = await downloadYoutubeVideo(url);
     ctx
       .replyWithVideo(Input.fromReadableStream(fileSource))
@@ -44,19 +42,6 @@ bot.command(["reel", "Reel"], async (ctx) => {
     });
   } catch (error) {
     errorHandler(error, ctx);
-  }
-});
-
-bot.command(["pinterest", "Pinterest"], async (ctx) => {
-  try {
-    const url = getUrl(ctx);
-    const videoUrl = await downloadPinterest(url);
-    ctx.reply(videoUrl);
-    ctx.replyWithVideo(Input.fromURLStream(videoUrl)).then((response) => {
-      console.log(`Video descargado`);
-    });
-  } catch (error) {
-    console.error(error);
   }
 });
 

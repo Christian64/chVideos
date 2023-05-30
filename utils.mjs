@@ -25,15 +25,3 @@ export const downloadYoutubeVideo = (url) => {
     video.on("end", () => resolve(source));
   });
 };
-
-export const downloadPinterest = async (url) => {
-  const browser = await puppeteer.launch();
-  const [page] = await browser.pages();
-  await page.goto(url);
-
-  await page.waitForSelector("video");
-  const videoUrl = await page.$eval("video", (video) => video.src);
-  await browser.close();
-
-  return videoUrl;
-};
