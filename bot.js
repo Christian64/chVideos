@@ -1,8 +1,12 @@
-const { config } = require("dotenv")
-config({ path: "./.env" })
-const { Telegraf, Input } = require("telegraf") 
-const fs = require("fs") 
-const { getUrl, downloadInstagramReel, downloadYoutubeVideo} = require('./utils.js') 
+const { config } = require("dotenv");
+config({ path: "./.env" });
+const { Telegraf, Input } = require("telegraf");
+const fs = require("fs");
+const {
+  getUrl,
+  downloadInstagramReel,
+  downloadYoutubeVideo,
+} = require("./utils.js");
 
 const bot = new Telegraf(process.env.TELEGRAM_TOKEN);
 
@@ -17,11 +21,9 @@ bot.command("yt", async (ctx) => {
     ctx.reply("Descargando Video...");
     const url = getUrl(ctx);
     const fileSource = await downloadYoutubeVideo(url);
-    ctx
-      .replyWithVideo(Input.fromReadableStream(fileSource))
-      .then(_ => {
-        fs.unlinkSync(fileSource);
-      });
+    ctx.replyWithVideo(Input.fromReadableStream(fileSource)).then((_) => {
+      fs.unlinkSync(fileSource);
+    });
   } catch (error) {
     errorHandler(error, ctx);
   }
@@ -32,7 +34,7 @@ bot.command(["reel", "Reel"], async (ctx) => {
     ctx.reply("Descargando Video ...");
     const url = getUrl(ctx);
     const videoUrl = await downloadInstagramReel(url);
-    ctx.replyWithVideo(Input.fromURLStream(videoUrl))
+    ctx.replyWithVideo(Input.fromURLStream(videoUrl));
   } catch (error) {
     errorHandler(error, ctx);
   }
