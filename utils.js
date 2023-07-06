@@ -6,7 +6,12 @@ const crypto = require("crypto");
 const getUrl = (ctx) => ctx.message.text.split(" ")[1];
 
 const downloadInstagramReel = async (url) => {
-  const browser = await puppeteer.launch();
+  const browser = await puppeteer.launch({
+    executablePath:
+      process.env.NODE_ENV === "production"
+        ? process.env.PUPPETEER_EXECUTABLE_PATH
+        : puppeteer.executablePath(),
+  });
   const [page] = await browser.pages();
   await page.goto(url);
 
