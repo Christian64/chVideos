@@ -1,11 +1,11 @@
-import fs from "fs";
-import ytdl from "ytdl-core";
-import puppeteer from "puppeteer";
-import crypto from "crypto";
+const fs = require("fs");
+const ytdl = require("ytdl-core");
+const puppeteer = require("puppeteer");
+const crypto = require("crypto");
 
-export const getUrl = (ctx) => ctx.message.text.split(" ")[1];
+const getUrl = (ctx) => ctx.message.text.split(" ")[1];
 
-export const downloadInstagramReel = async (url) => {
+const downloadInstagramReel = async (url) => {
   const browser = await puppeteer.launch();
   const [page] = await browser.pages();
   await page.goto(url);
@@ -17,11 +17,17 @@ export const downloadInstagramReel = async (url) => {
   return videoUrl;
 };
 
-export const downloadYoutubeVideo = (url) => {
+const downloadYoutubeVideo = (url) => {
   return new Promise((resolve) => {
     const video = ytdl(url, { quality: "highestaudio" });
     const source = `./temp/${crypto.randomUUID()}.mp4`;
     video.pipe(fs.createWriteStream(source));
     video.on("end", () => resolve(source));
   });
+};
+
+module.exports = {
+  getUrl,
+  downloadInstagramReel,
+  downloadYoutubeVideo,
 };
